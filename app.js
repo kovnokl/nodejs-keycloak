@@ -1,7 +1,8 @@
+const e = require('express');
 const express = require('express');
 const app = express();
 require('dotenv').config();
-const { auth } = require('express-openid-connect');
+const { auth, requiresAuth } = require('express-openid-connect');
 
 app.use(
     auth({
@@ -16,7 +17,11 @@ app.use(
 
 app.get('/', (req, res) => {
     res.send(req.oidc.isAuthenticated() ? 'Logged in' : 'Logged out');
-})
+});
+
+app.get('/profile/', requiresAuth(), (req, res) =>{
+    res.send(JSON.stringify(res.oidc.user));
+});
 
 const port = process.env.port || 3000;
 app.listen(port, () => {
