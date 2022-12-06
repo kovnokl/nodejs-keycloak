@@ -20,7 +20,7 @@ app.get('/', (req, res) => {
 });
 
 app.get('/profile/', requiresAuth(), (req, res) =>{
-    res.send(req.oidc.user);
+    res.send(JSON.stringify(req.oidc.user, undefined, 2));
 });
 
 const port = process.env.port || 3000;
